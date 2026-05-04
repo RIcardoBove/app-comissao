@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/comissaoListFragment">
+
+    <fragment
+        android:id="@+id/comissaoListFragment"
+        android:name="com.example.comisso.ui.comissao.ComissaoListFragment"
+        android:label="Lista">
+
+        <action
+            android:id="@+id/action_list_to_form"
+            app:destination="@+id/comissaoFormFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/comissaoFormFragment"
+        android:name="com.example.comisso.ui.comissao.ComissaoFormFragment"
+        android:label="Formulario" />
+
+    <fragment
+        android:id="@+id/resumoFragment"
+        android:name="com.example.comisso.ui.comissao.ResumoFragment"
+        android:label="Resumo" />
+
+
+</navigation>

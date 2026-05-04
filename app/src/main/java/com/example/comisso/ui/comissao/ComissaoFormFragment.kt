@@ -1,0 +1,117 @@
+package com.example.comisso.ui.comissao
+
+import android.R
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import androidx.fragment.app.Fragment
+import com.example.comisso.databinding.FragmentComissaoFormBinding
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+
+
+class ComissaoFormFragment : Fragment() {
+
+    private var _binding: FragmentComissaoFormBinding? = null
+
+    private val binding get() = _binding!!
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+
+        _binding = FragmentComissaoFormBinding.inflate(inflater, container, false)
+        return binding.root
+
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.etDate.setOnClickListener {
+            abrirDatePicker()
+        }
+
+        //Código para lista de carros na dropdown
+        val cars = listOf(
+            "Gol",
+            "Onix",
+            "HB20",
+            "Civic",
+            "Corolla"
+        )
+
+        val adapterCars = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_dropdown_item_1line,
+            cars
+        )
+
+        val dropDownCar = binding.dropdownCar
+
+        dropDownCar.setAdapter(adapterCars)
+
+        dropDownCar.setOnClickListener {
+            dropDownCar.showDropDown()
+        }
+        val typyngCar = dropDownCar.text.toString()
+
+        val service = listOf(
+            "Limpeza de Injeção",
+            "Troca de Pastilhas",
+            "Limpeza fluido direção",
+            "Sangria de freios"
+        )
+
+        val adpterService = ArrayAdapter (
+            requireContext(),
+            android.R.layout.simple_dropdown_item_1line,
+            service
+        )
+
+        val dropDownService = binding.dropdownServico
+
+        dropDownService.setAdapter(adpterService)
+
+        dropDownService.setOnClickListener {
+            dropDownService.showDropDown()
+        }
+
+
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
+
+    private fun abrirDatePicker() {
+        val datePicker = com.google.android.material.datepicker.MaterialDatePicker.Builder
+            .datePicker()
+            .setTitleText("Selecione a data")
+            .build()
+
+        datePicker.show(parentFragmentManager, "DATE_PICKER_TAG")
+
+        datePicker.addOnPositiveButtonClickListener { selection ->
+
+            val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+            val dataFormatada = sdf.format(Date(selection))
+
+            binding.etDate.setText(dataFormatada)
+        }
+    }
+
+
+
+}
