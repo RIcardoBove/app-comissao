@@ -53,7 +53,7 @@ class ComissaoFormFragment : Fragment() {
 
         val adapterCars = ArrayAdapter(
             requireContext(),
-            android.R.layout.simple_dropdown_item_1line,
+            R.layout.simple_dropdown_item_1line,
             cars
         )
 
@@ -64,8 +64,10 @@ class ComissaoFormFragment : Fragment() {
         dropDownCar.setOnClickListener {
             dropDownCar.showDropDown()
         }
-        val typyngCar = dropDownCar.text.toString()
+        val typingCar = dropDownCar.text.toString()
 
+
+        //Código para lista de serviços na dropdown
         val service = listOf(
             "Limpeza de Injeção",
             "Troca de Pastilhas",
@@ -86,6 +88,12 @@ class ComissaoFormFragment : Fragment() {
         dropDownService.setOnClickListener {
             dropDownService.showDropDown()
         }
+
+        val typingService = dropDownService.text.toString()
+
+
+
+
 
 
     }
