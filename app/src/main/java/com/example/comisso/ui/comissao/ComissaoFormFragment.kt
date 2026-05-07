@@ -72,12 +72,13 @@ class ComissaoFormFragment : Fragment() {
             "Limpeza de Injeção",
             "Troca de Pastilhas",
             "Limpeza fluido direção",
-            "Sangria de freios"
+            "Sangria de freios",
+            "Outro"
         )
 
-        val adpterService = ArrayAdapter (
+        val adpterService = ArrayAdapter(
             requireContext(),
-            android.R.layout.simple_dropdown_item_1line,
+            R.layout.simple_dropdown_item_1line,
             service
         )
 
@@ -89,11 +90,18 @@ class ComissaoFormFragment : Fragment() {
             dropDownService.showDropDown()
         }
 
+        dropDownService.setOnItemClickListener { _, _, position, _ ->
+
+            val select = service[position]
+
+            if (select == "Outro") {
+                binding.layoutNovoServico.visibility = View.VISIBLE
+            } else {
+                binding.layoutNovoServico.visibility = View.GONE
+            }
+        }
+
         val typingService = dropDownService.text.toString()
-
-
-
-
 
 
     }
@@ -119,7 +127,6 @@ class ComissaoFormFragment : Fragment() {
             binding.etDate.setText(dataFormatada)
         }
     }
-
 
 
 }

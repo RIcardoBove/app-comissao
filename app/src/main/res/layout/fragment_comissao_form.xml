@@ -59,7 +59,7 @@
             android:id="@+id/layoutNovoServico"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Nome do serviço"
+            android:hint="Novo do serviço"
             android:visibility="gone">
 
             <com.google.android.material.textfield.TextInputEditText
