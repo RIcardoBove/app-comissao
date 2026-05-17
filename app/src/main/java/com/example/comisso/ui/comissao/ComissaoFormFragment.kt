@@ -2,12 +2,18 @@ package com.example.comisso.ui.comissao
 
 import android.R
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import com.example.comisso.data.local.database.AppDatabase
+import com.example.comisso.data.local.entity.CommissionEntity
 import com.example.comisso.databinding.FragmentComissaoFormBinding
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -37,6 +43,12 @@ class ComissaoFormFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
+
+        val db = AppDatabase.getDatabase(requireContext())
+        val dao = db.commissionDao()
+
 
         binding.etDate.setOnClickListener {
             abrirDatePicker()
@@ -113,6 +125,45 @@ class ComissaoFormFragment : Fragment() {
 
                 binding.layoutNovoServico.visibility = View.GONE
             }
+        }
+
+        binding.btnSalvar.setOnClickListener {
+            val date = binding.etDate.text.toString()
+            val car = binding.dropdownCar.text.toString()
+            val service = binding.dropdownServico.text.toString()
+            val value = binding.etValor.text.toString().toDoubleOrNull() ?: 0.0
+
+            val isCustomService = service == "Outro"
+
+            val finalService = if (isCustomService) {
+                binding.etNovoServico.text.toString()
+            } else {
+                service
+            }
+
+            val commission = CommissionEntity(
+                date = date,
+                car = car,
+                service = finalService,
+                value = value,
+                isCustomService = isCustomService
+            )
+
+            lifecycleScope.launch {
+
+                dao.insert(commission)
+
+            }
+
+            Toast.makeText(requireContext(), "Salvo com sucesso", Toast.LENGTH_SHORT).show()
+
+        }
+
+        lifecycleScope.launch {
+
+            val commissions = dao.getAll()
+
+            Log.d("Room_Test", commissions.toString())
         }
 
 

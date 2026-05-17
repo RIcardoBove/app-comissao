@@ -6,9 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.comisso.R
+import com.example.comisso.data.local.database.AppDatabase
 import com.example.comisso.databinding.FragmentComissaoListBinding
+import com.example.comisso.ui.comissao.adapter.CommissioAdapter
+import kotlinx.coroutines.launch
 
 
 class ComissaoListFragment : Fragment() {
@@ -37,6 +42,22 @@ class ComissaoListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val db = AppDatabase.getDatabase(requireContext())
+
+        val dao = db.commissionDao()
+
+        val recyclerView = binding.rvComissao
+
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+        lifecycleScope.launch {
+            val commissions = dao.getAll()
+
+            val adapter = CommissioAdapter(commissions)
+
+            recyclerView.adapter = adapter
+        }
 
         binding.fabAddComissao.setOnClickListener {
             Log.i("ComissaoListFragment", "Clicou no FAB")
