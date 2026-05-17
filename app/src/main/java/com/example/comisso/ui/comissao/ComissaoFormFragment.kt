@@ -96,12 +96,24 @@ class ComissaoFormFragment : Fragment() {
 
             if (select == "Outro") {
                 binding.layoutNovoServico.visibility = View.VISIBLE
+
+                binding.etValor.setText("")
+                binding.etValor.isEnabled = true
+
             } else {
+                val valor = when (select) {
+                    "Limpeza de Injeção" -> "35"
+                    "Troca de Pastilhas" -> "30"
+                    "Limpeza fluido direção" -> "30"
+                    "Sangria de freios" -> "30"
+                    else -> ""
+                }
+                binding.etValor.setText(valor)
+                binding.etValor.isEnabled = false
+
                 binding.layoutNovoServico.visibility = View.GONE
             }
         }
-
-        val typingService = dropDownService.text.toString()
 
 
     }
