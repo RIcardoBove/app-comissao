@@ -5,9 +5,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.comisso.data.local.entity.CommissionEntity
 import com.example.comisso.databinding.ItemCommissionBinding
+import java.time.format.DateTimeFormatter
 
 class CommissioAdapter(private val commissions: List<CommissionEntity>) :
     RecyclerView.Adapter<CommissioAdapter.ViewHolder>() {
+
+    private val dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding =
@@ -24,9 +27,8 @@ class CommissioAdapter(private val commissions: List<CommissionEntity>) :
 
         holder.binding.tvService.text = commission.service
         holder.binding.tvCar.text = commission.car
-        holder.binding.tvDate.text = commission.date
+        holder.binding.tvDate.text = commission.date.format(dateFormatter)
         holder.binding.tvValue.text = "R$ ${commission.value}"
-
     }
 
     class ViewHolder(val binding: ItemCommissionBinding) : RecyclerView.ViewHolder(binding.root)

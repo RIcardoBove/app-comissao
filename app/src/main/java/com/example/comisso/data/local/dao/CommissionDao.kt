@@ -11,6 +11,6 @@ interface CommissionDao {
     @Insert
     suspend fun insert(commission: CommissionEntity)
 
-    @Query("SELECT * FROM commissions")
+    @Query("SELECT * FROM commissions ORDER BY date ASC")
     suspend fun getAll(): List<CommissionEntity>
 }

@@ -2,7 +2,6 @@ package com.example.comisso.ui.comissao
 
 import android.R
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,10 +13,11 @@ import com.example.comisso.data.local.database.AppDatabase
 import com.example.comisso.data.local.entity.CommissionEntity
 import com.example.comisso.databinding.FragmentComissaoFormBinding
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
-
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.Calendar
+import java.util.TimeZone
+import androidx.navigation.fragment.findNavController
 
 class ComissaoFormFragment : Fragment() {
 
@@ -44,11 +44,8 @@ class ComissaoFormFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-
         val db = AppDatabase.getDatabase(requireContext())
         val dao = db.commissionDao()
-
 
         binding.etDate.setOnClickListener {
             abrirDatePicker()
@@ -133,6 +130,9 @@ class ComissaoFormFragment : Fragment() {
             val service = binding.dropdownServico.text.toString()
             val value = binding.etValor.text.toString().toDoubleOrNull() ?: 0.0
 
+            val formater = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+            val dateFormatted = LocalDate.parse(date, formater)
+
             val isCustomService = service == "Outro"
 
             val finalService = if (isCustomService) {
@@ -142,7 +142,7 @@ class ComissaoFormFragment : Fragment() {
             }
 
             val commission = CommissionEntity(
-                date = date,
+                date = dateFormatted,
                 car = car,
                 service = finalService,
                 value = value,
@@ -150,22 +150,13 @@ class ComissaoFormFragment : Fragment() {
             )
 
             lifecycleScope.launch {
-
                 dao.insert(commission)
-
             }
 
             Toast.makeText(requireContext(), "Salvo com sucesso", Toast.LENGTH_SHORT).show()
 
+            findNavController().popBackStack()
         }
-
-        lifecycleScope.launch {
-
-            val commissions = dao.getAll()
-
-            Log.d("Room_Test", commissions.toString())
-        }
-
 
     }
 
@@ -184,10 +175,20 @@ class ComissaoFormFragment : Fragment() {
 
         datePicker.addOnPositiveButtonClickListener { selection ->
 
-            val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-            val dataFormatada = sdf.format(Date(selection))
+            val utcCalendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
 
-            binding.etDate.setText(dataFormatada)
+            utcCalendar.timeInMillis = selection
+
+            val day = utcCalendar.get(Calendar.DAY_OF_MONTH)
+
+            val month = utcCalendar.get(Calendar.MONTH) + 1
+
+            val year = utcCalendar.get(Calendar.YEAR)
+
+            val formattedDate =
+                String.format("%02d/%02d/%d", day, month, year)
+
+            binding.etDate.setText(formattedDate)
         }
     }
 
