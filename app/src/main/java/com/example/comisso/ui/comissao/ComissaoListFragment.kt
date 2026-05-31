@@ -15,6 +15,8 @@ import com.example.comisso.databinding.FragmentComissaoListBinding
 import com.example.comisso.ui.comissao.adapter.CommissioAdapter
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.time.format.TextStyle
+import java.util.Locale
 
 
 class ComissaoListFragment : Fragment() {
@@ -43,16 +45,22 @@ class ComissaoListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val db = AppDatabase.getDatabase(requireContext())
-
         val dao = db.commissionDao()
-
         val recyclerView = binding.rvComissao
 
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
+
         lifecycleScope.launch {
 
             val today = LocalDate.now()
+            val monthName = today.month.getDisplayName(
+                TextStyle.FULL,
+                Locale("pt","BR")
+            ).replaceFirstChar { it.uppercase() }
+
+            binding.tvMonth.text = "$monthName ${today.year}"
+
             val startDate = today.withDayOfMonth(1)
             val endDate = today.withDayOfMonth(today.dayOfMonth)
 
