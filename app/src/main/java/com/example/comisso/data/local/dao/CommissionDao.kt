@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import com.example.comisso.data.local.entity.CommissionEntity
+import java.time.LocalDate
 
 @Dao
 interface CommissionDao {
@@ -13,4 +14,8 @@ interface CommissionDao {
 
     @Query("SELECT * FROM commissions ORDER BY date ASC")
     suspend fun getAll(): List<CommissionEntity>
+
+@Query("SELECT *FROM commissions WHERE date BETWEEN :startDate AND :endDate ORDER BY date ASC")
+suspend fun getCommissionsByDate(startDate: LocalDate, endDate: LocalDate): List<CommissionEntity>
+
 }

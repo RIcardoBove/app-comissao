@@ -14,6 +14,7 @@ import com.example.comisso.data.local.database.AppDatabase
 import com.example.comisso.databinding.FragmentComissaoListBinding
 import com.example.comisso.ui.comissao.adapter.CommissioAdapter
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 
 
 class ComissaoListFragment : Fragment() {
@@ -50,7 +51,12 @@ class ComissaoListFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         lifecycleScope.launch {
-            val commissions = dao.getAll()
+
+            val today = LocalDate.now()
+            val startDate = today.withDayOfMonth(1)
+            val endDate = today.withDayOfMonth(today.dayOfMonth)
+
+            val commissions = dao.getCommissionsByDate(startDate, endDate)
 
             val adapter = CommissioAdapter(commissions)
 
