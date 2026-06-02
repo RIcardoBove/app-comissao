@@ -73,27 +73,37 @@ class ComissaoFormFragment : Fragment() {
         dropDownCar.setOnClickListener {
             dropDownCar.showDropDown()
         }
-        val typingCar = dropDownCar.text.toString()
-
 
         //Código para lista de serviços na dropdown
-        val service = listOf(
-            "Limpeza de Injeção",
-            "Troca de Pastilhas",
-            "Limpeza fluido direção",
-            "Sangria de freios",
-            "Outro"
+        data class Service(
+            val name: String,
+            val price: Double
         )
 
-        val adpterService = ArrayAdapter(
+        val services = listOf(
+            Service("Oleo de Câmbio Automatico", 100.0),
+            Service("Limpeza de Injeção", 35.0),
+            Service("Troca de Pastilhas", 30.0),
+            Service("Troca de disco ou Faceamento", 25.0),
+            Service("Limpeza fluido direção", 30.0),
+            Service("Sangria de freios", 30.0),
+            Service("Troca liquido arrefecimento", 40.0),
+            Service("Filtro de Cabine e Higenização", 15.0),
+            Service("Militec", 10.0)
+        )
+
+        val serviceNames = services.map { it.name }.toMutableList()
+        serviceNames.add("Outro")
+
+        val adapterService = ArrayAdapter(
             requireContext(),
             R.layout.simple_dropdown_item_1line,
-            service
+            serviceNames
         )
 
         val dropDownService = binding.dropdownServico
 
-        dropDownService.setAdapter(adpterService)
+        dropDownService.setAdapter(adapterService)
 
         dropDownService.setOnClickListener {
             dropDownService.showDropDown()
@@ -101,29 +111,26 @@ class ComissaoFormFragment : Fragment() {
 
         dropDownService.setOnItemClickListener { _, _, position, _ ->
 
-            val select = service[position]
+            val selectedService = serviceNames[position]
 
-            if (select == "Outro") {
+            if (selectedService == "Outro") {
+
                 binding.layoutNovoServico.visibility = View.VISIBLE
-
                 binding.etValor.setText("")
-                binding.etValor.isEnabled = true
 
             } else {
-                val valor = when (select) {
-                    "Limpeza de Injeção" -> "35"
-                    "Troca de Pastilhas" -> "30"
-                    "Limpeza fluido direção" -> "30"
-                    "Sangria de freios" -> "30"
-                    else -> ""
+
+                val service = services.first {
+                    it.name == selectedService
                 }
-                binding.etValor.setText(valor)
-                binding.etValor.isEnabled = false
+
+                binding.etValor.setText(
+                    service.price.toString()
+                )
 
                 binding.layoutNovoServico.visibility = View.GONE
             }
         }
-
         binding.btnSalvar.setOnClickListener {
             val date = binding.etDate.text.toString()
             val car = binding.dropdownCar.text.toString()
