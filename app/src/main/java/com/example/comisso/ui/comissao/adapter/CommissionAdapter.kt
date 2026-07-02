@@ -5,7 +5,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.comisso.data.local.entity.CommissionEntity
 import com.example.comisso.databinding.ItemCommissionBinding
+import java.text.NumberFormat
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 class CommissionAdapter(private val commissions: List<CommissionEntity>) :
     RecyclerView.Adapter<CommissionAdapter.ViewHolder>() {
@@ -28,7 +30,8 @@ class CommissionAdapter(private val commissions: List<CommissionEntity>) :
         holder.binding.tvService.text = commission.service
         holder.binding.tvCar.text = commission.car
         holder.binding.tvDate.text = commission.date.format(dateFormatter)
-        holder.binding.tvValue.text = "R$ ${commission.value}"
+        val totalFormatted = NumberFormat.getCurrencyInstance(Locale("pt", "BR")).format(commission.value)
+        holder.binding.tvValue.text = totalFormatted
     }
 
     class ViewHolder(val binding: ItemCommissionBinding) : RecyclerView.ViewHolder(binding.root)

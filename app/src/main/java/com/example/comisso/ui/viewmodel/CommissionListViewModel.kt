@@ -7,12 +7,17 @@ import java.time.LocalDate
 
 class CommissionListViewModel(private val repository: CommissionRepository): ViewModel() {
 
-
-
     suspend fun getCommissionsByDate(
         startDate: LocalDate,
         endDate: LocalDate
     ): List<CommissionEntity> {
         return repository.getCommissionsByDate(startDate, endDate)
     }
+
+    fun calculateTotal(
+        commissions: List<CommissionEntity>
+    ): Double {
+        return commissions.sumOf { it.value }
+    }
+
 }

@@ -19,6 +19,7 @@ import com.example.comisso.ui.comissao.adapter.CommissionAdapter
 import com.example.comisso.ui.factory.CommissionListViewFactory
 import com.example.comisso.ui.viewmodel.CommissionListViewModel
 import kotlinx.coroutines.launch
+import java.text.NumberFormat
 import java.time.LocalDate
 import java.time.format.TextStyle
 import java.util.Locale
@@ -81,13 +82,17 @@ class CommissionListFragment : Fragment() {
 
             val commissions = viewModel.getCommissionsByDate(startDate, endDate)
 
+            //calculate total and format it
+            val total = viewModel.calculateTotal(commissions)
+            val totalFormatted = NumberFormat.getCurrencyInstance(Locale("pt", "BR")).format(total)
+            binding.tvTotalMonth.text = totalFormatted
+
             val adapter = CommissionAdapter(commissions)
 
             recyclerView.adapter = adapter
         }
 
         binding.fabAddComissao.setOnClickListener {
-            Log.i("ComissaoListFragment", "Clicou no FAB")
             findNavController().navigate(R.id.action_list_to_form)
         }
     }
