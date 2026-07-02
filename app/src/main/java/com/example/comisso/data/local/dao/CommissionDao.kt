@@ -15,7 +15,10 @@ interface CommissionDao {
     @Query("SELECT * FROM commissions ORDER BY date ASC")
     suspend fun getAll(): List<CommissionEntity>
 
-@Query("SELECT *FROM commissions WHERE date BETWEEN :startDate AND :endDate ORDER BY date ASC")
-suspend fun getCommissionsByDate(startDate: LocalDate, endDate: LocalDate): List<CommissionEntity>
+    @Query("SELECT *FROM commissions WHERE date BETWEEN :startDate AND :endDate ORDER BY date ASC")
+    suspend fun getCommissionsByDate(
+        startDate: LocalDate,
+        endDate: LocalDate
+    ): List<CommissionEntity>
 
 }

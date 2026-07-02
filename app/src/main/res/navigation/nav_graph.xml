@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/comissaoListFragment"
-        android:name="com.example.comisso.ui.comissao.ComissaoListFragment"
+        android:name="com.example.comisso.ui.comissao.CommissionListFragment"
         android:label="Lista">
 
         <action
@@ -17,12 +17,12 @@
 
     <fragment
         android:id="@+id/comissaoFormFragment"
-        android:name="com.example.comisso.ui.comissao.ComissaoFormFragment"
+        android:name="com.example.comisso.ui.comissao.CommissionFormFragment"
         android:label="Formulario" />
 
     <fragment
         android:id="@+id/resumoFragment"
-        android:name="com.example.comisso.ui.comissao.ResumoFragment"
+        android:name="com.example.comisso.ui.comissao.CommissionResumeFragment"
         android:label="Resumo" />
 
 

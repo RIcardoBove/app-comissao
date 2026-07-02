@@ -5,13 +5,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.comisso.R
-import com.example.comisso.databinding.FragmentComissaoListBinding
 import com.example.comisso.databinding.FragmentResumoBinding
 
 
 
-class ResumoFragment : Fragment() {
+class CommissionResumeFragment : Fragment() {
 
     private var _binding: FragmentResumoBinding? = null
 

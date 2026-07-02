@@ -7,8 +7,8 @@ import com.example.comisso.data.local.entity.CommissionEntity
 import com.example.comisso.databinding.ItemCommissionBinding
 import java.time.format.DateTimeFormatter
 
-class CommissioAdapter(private val commissions: List<CommissionEntity>) :
-    RecyclerView.Adapter<CommissioAdapter.ViewHolder>() {
+class CommissionAdapter(private val commissions: List<CommissionEntity>) :
+    RecyclerView.Adapter<CommissionAdapter.ViewHolder>() {
 
     private val dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
 

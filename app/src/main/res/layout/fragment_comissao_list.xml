@@ -5,7 +5,7 @@
     android:background="#005566"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.comissao.ComissaoListFragment">
+    tools:context=".ui.comissao.CommissionListFragment">
 
     <TextView
         android:id="@+id/tv_month"

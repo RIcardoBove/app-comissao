@@ -19,7 +19,7 @@ import java.util.Calendar
 import java.util.TimeZone
 import androidx.navigation.fragment.findNavController
 
-class ComissaoFormFragment : Fragment() {
+class CommissionFormFragment : Fragment() {
 
     private var _binding: FragmentComissaoFormBinding? = null
 
