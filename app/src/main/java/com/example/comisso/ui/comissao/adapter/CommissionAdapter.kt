@@ -9,7 +9,9 @@ import java.text.NumberFormat
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
-class CommissionAdapter(private val commissions: List<CommissionEntity>) :
+class CommissionAdapter(
+    private val commissions: List<CommissionEntity>,
+    private val onDeleteClick: (CommissionEntity) -> Unit) :
     RecyclerView.Adapter<CommissionAdapter.ViewHolder>() {
 
     private val dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
@@ -32,6 +34,10 @@ class CommissionAdapter(private val commissions: List<CommissionEntity>) :
         holder.binding.tvDate.text = commission.date.format(dateFormatter)
         val totalFormatted = NumberFormat.getCurrencyInstance(Locale("pt", "BR")).format(commission.value)
         holder.binding.tvValue.text = totalFormatted
+
+        holder.binding.ivDelete.setOnClickListener {
+            onDeleteClick(commission)
+        }
     }
 
     class ViewHolder(val binding: ItemCommissionBinding) : RecyclerView.ViewHolder(binding.root)

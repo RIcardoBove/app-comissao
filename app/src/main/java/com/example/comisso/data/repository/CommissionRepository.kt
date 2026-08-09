@@ -6,8 +6,7 @@ import java.time.LocalDate
 
 class CommissionRepository(private val commissionDao: CommissionDao) {
 
-    suspend fun insert(commission: CommissionEntity) = commissionDao.insert(commission)
-
+    suspend fun delete(commission: CommissionEntity) = commissionDao.delete(commission)
 
     suspend fun getCommissionsByDate(
         startDate: LocalDate,
