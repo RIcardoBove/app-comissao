@@ -8,10 +8,14 @@ import androidx.room.TypeConverters
 import com.example.comisso.data.local.converter.Converters
 import com.example.comisso.data.local.dao.CommissionDao
 import com.example.comisso.data.local.entity.CommissionEntity
+import com.example.comisso.data.local.entity.CommissionServiceEntity
 
 @Database(
-    entities = [CommissionEntity::class],
-    version = 1
+    entities = [
+        CommissionEntity::class,
+        CommissionServiceEntity::class
+                ],
+        version = 2
 )
 
 @TypeConverters(Converters::class)
@@ -30,7 +34,8 @@ abstract class AppDatabase : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     AppDatabase::class.java,
-                    "app_database").build()
+                    "app_database"
+                ).build()
 
                 INSTANCE = instance
 

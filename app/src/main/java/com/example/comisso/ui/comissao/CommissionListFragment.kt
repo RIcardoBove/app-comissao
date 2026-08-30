@@ -8,10 +8,13 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.view.GestureDetectorCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.comisso.R
@@ -96,16 +99,14 @@ class CommissionListFragment : Fragment() {
         recyclerView = binding.rvComissao
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        lifecycleScope.launch {
-            loadMonth(selectedMonth)
-        }
+        loadMonth(selectedMonth)
 
         binding.fabAddComissao.setOnClickListener {
             findNavController().navigate(R.id.action_list_to_form)
         }
     }
 
-    private suspend fun loadMonth(month: LocalDate) {
+    private fun loadMonth(month: LocalDate) {
 
         val monthName = month.month.getDisplayName(
             TextStyle.FULL,
@@ -117,18 +118,34 @@ class CommissionListFragment : Fragment() {
         val startDate = month.withDayOfMonth(1)
         val endDate = month.withDayOfMonth(month.lengthOfMonth())
 
-        val commissions = viewModel.getCommissionsByDate(startDate, endDate)
-        adapter = CommissionAdapter(commissions) { commission ->
-            showDeleteConfirmationDialog(commission)
+        viewLifecycleOwner.lifecycleScope.launch {
+
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+
+                viewModel.getCommissionsByDate(
+                    startDate,
+                    endDate
+                ).collect { commissions ->
+
+                    adapter = CommissionAdapter(commissions) { commission ->
+                        showDeleteConfirmationDialog(commission)
+                    }
+
+                    recyclerView.adapter = adapter
+
+                    val total = viewModel.calculateTotal(commissions)
+
+                    val totalFormatted =
+                        NumberFormat.getCurrencyInstance(
+                            Locale("pt", "BR")
+                        ).format(total)
+
+                    binding.tvTotalMonth.text = totalFormatted
+                }
+            }
         }
-
-        //calculate total and format it
-        val total = viewModel.calculateTotal(commissions)
-        val totalFormatted = NumberFormat.getCurrencyInstance(Locale("pt", "BR")).format(total)
-        binding.tvTotalMonth.text = totalFormatted
-
-        recyclerView.adapter = adapter
     }
+
 
     private fun showDeleteConfirmationDialog(commission: CommissionEntity) {
         AlertDialog.Builder(requireContext())
@@ -136,20 +153,16 @@ class CommissionListFragment : Fragment() {
             .setMessage("Tem certeza que deseja excluir esta comissão?")
             .setPositiveButton("Sim") { _, _ ->
                 viewModel.deleteCommission(commission)
-                lifecycleScope.launch {
                     loadMonth(selectedMonth)
-                }
             }
             .setNegativeButton("Não", null)
             .show()
     }
 
 
-override fun onDestroy() {
-    super.onDestroy()
-    _binding = null
-}
-
-
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
 
 }

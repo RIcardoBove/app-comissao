@@ -4,7 +4,10 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Transaction
+import com.example.comisso.data.local.relation.CommissionWithServices
 import com.example.comisso.data.local.entity.CommissionEntity
+import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate
 
 @Dao
@@ -16,10 +19,15 @@ interface CommissionDao {
     @Delete
     suspend fun delete(commission: CommissionEntity)
 
-    @Query("SELECT *FROM commissions WHERE date BETWEEN :startDate AND :endDate ORDER BY date ASC")
-    suspend fun getCommissionsByDate(
+    @Transaction
+    @Query("""
+    SELECT * FROM commissions
+    WHERE date BETWEEN :startDate AND :endDate
+    ORDER BY date ASC
+""")
+    fun getCommissionsByDate(
         startDate: LocalDate,
         endDate: LocalDate
-    ): List<CommissionEntity>
+    ): Flow<List<CommissionWithServices>>
 
 }

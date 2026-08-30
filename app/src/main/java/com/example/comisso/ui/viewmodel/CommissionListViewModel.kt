@@ -4,15 +4,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.comisso.data.local.entity.CommissionEntity
 import com.example.comisso.data.repository.CommissionRepository
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
-class CommissionListViewModel(private val repository: CommissionRepository): ViewModel() {
+class CommissionListViewModel(private val repository: CommissionRepository) : ViewModel() {
 
-    suspend fun getCommissionsByDate(
+     fun getCommissionsByDate(
         startDate: LocalDate,
         endDate: LocalDate
-    ): List<CommissionEntity> {
+    ): Flow<List<CommissionEntity>> {
         return repository.getCommissionsByDate(startDate, endDate)
     }
 
@@ -25,6 +26,7 @@ class CommissionListViewModel(private val repository: CommissionRepository): Vie
     fun deleteCommission(commission: CommissionEntity) {
         viewModelScope.launch {
             repository.delete(commission)
+
         }
     }
 

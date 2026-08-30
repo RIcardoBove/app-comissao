@@ -7,11 +7,12 @@ import java.time.LocalDate
 @Entity(tableName = "commissions")
 
 data class CommissionEntity(
+
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     val date: LocalDate,
     val car: String,
-    val service: String,
-    val value: Double,
-    val isCustomService: Boolean
+//    val service: String,
+//    val value: Double,
+//    val isCustomService: Boolean
 )
