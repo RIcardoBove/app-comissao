@@ -14,7 +14,8 @@ import java.time.LocalDate
 interface CommissionDao {
 
     @Insert
-    suspend fun insert(commission: CommissionEntity)
+    suspend fun insert(commission: CommissionEntity): Long
+
 
     @Delete
     suspend fun delete(commission: CommissionEntity)

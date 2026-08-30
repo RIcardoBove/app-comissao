@@ -4,13 +4,14 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.comisso.data.local.entity.CommissionEntity
+import com.example.comisso.data.local.relation.CommissionWithServices
 import com.example.comisso.databinding.ItemCommissionBinding
 import java.text.NumberFormat
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 class CommissionAdapter(
-    private val commissions: List<CommissionEntity>,
+    private val commissions: List<CommissionWithServices>,
     private val onDeleteClick: (CommissionEntity) -> Unit) :
     RecyclerView.Adapter<CommissionAdapter.ViewHolder>() {
 
@@ -27,13 +28,35 @@ class CommissionAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val commission = commissions[position]
 
-        holder.binding.tvService.text = commission.service
-        holder.binding.tvCar.text = commission.car
-        holder.binding.tvDate.text = commission.date.format(dateFormatter)
-        val totalFormatted = NumberFormat.getCurrencyInstance(Locale("pt", "BR")).format(commission.value)
-        holder.binding.tvValue.text = totalFormatted
+        val commissionWithServices = commissions[position]
+
+        val commission = commissionWithServices.commission
+        val services = commissionWithServices.services
+
+        holder.binding.tvDate.text =
+            commission.date.format(dateFormatter)
+
+        // Mostra todos os serviços
+        val servicesText = services.joinToString("\n") { service ->
+            "${service.service} - ${
+                NumberFormat
+                    .getCurrencyInstance(Locale("pt", "BR"))
+                    .format(service.value)
+            }"
+        }
+
+        holder.binding.tvService.text = servicesText
+
+        // Soma os serviços daquele carro
+        val total = services.sumOf { service ->
+            service.value
+        }
+
+        holder.binding.tvValue.text =
+            NumberFormat
+                .getCurrencyInstance(Locale("pt", "BR"))
+                .format(total)
 
         holder.binding.ivDelete.setOnClickListener {
             onDeleteClick(commission)

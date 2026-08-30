@@ -18,6 +18,7 @@ import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.TimeZone
 import androidx.navigation.fragment.findNavController
+import com.example.comisso.data.local.relation.CommissionWithServices
 
 class CommissionFormFragment : Fragment() {
 
@@ -155,6 +156,7 @@ class CommissionFormFragment : Fragment() {
                 value = value,
                 isCustomService = isCustomService
             )
+
 
             lifecycleScope.launch {
                 dao.insert(commission)

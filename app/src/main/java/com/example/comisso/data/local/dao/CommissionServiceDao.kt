@@ -12,6 +12,9 @@ interface CommissionServiceDao {
     @Insert
     suspend fun insert(commissionService: CommissionServiceEntity)
 
+    @Insert
+    suspend fun insertAll(services: List<CommissionServiceEntity>)
+
     @Delete
     suspend fun delete(commissionService: CommissionServiceEntity)
 
